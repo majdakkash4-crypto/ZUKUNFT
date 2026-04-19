@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>ZUKUNFT — DROP 01</title>
+  <meta name="description" content="ZUKUNFT Streetwear — Authentisch. Bold. Ungefiltert. DROP 01 kommt bald. Trag dich in die Warteliste ein.">
+  <meta property="og:title" content="ZUKUNFT — DROP 01">
+  <meta property="og:description" content="Streetwear aus der Zukunft. DROP 01 kommt bald.">
+  <meta name="theme-color" content="#000000">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:   #000000;
+      --bg2:  #080808;
+      --bg3:  #111111;
+      --wh:   #ffffff;
+      --gr:   #555555;
+      --grl:  #aaaaaa;
+      --fd:   'Big Shoulders Display', sans-serif;
+      --fb:   'Space Grotesk', sans-serif;
+      --fm:   'Space Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--wh);
+      font-family: var(--fb);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── CURSOR ──────────────────────────────── */
+    .cur {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: #fff;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      transform: translate(-50%,-50%);
+      mix-blend-mode: difference;
+      transition: width .25s, height .25s;
+      will-change: left, top;
+    }
+    .cur-f {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%,-50%);
+      mix-blend-mode: difference;
+      transition: width .3s, height .3s, border-color .3s;
+      will-change: left, top;
+    }
+
+    /* ── LOADER ──────────────────────────────── */
+    #loader {
+      position: fixed; inset: 0;
+      background: #000;
+      z-index: 9000;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    #loader-txt {
+      font-family: var(--fd);
+      font-size: clamp(3rem, 12vw, 9rem);
+      font-weight: 900;
+      letter-spacing: .12em;
+      opacity: 0;
+    }
+    #loader-bar {
+      width: 0;
+      height: 1px;
+      background: #fff;
+      margin-top: 2rem;
+      transition: width .9s cubic-bezier(.76,0,.24,1);
+    }
+
+    /* ── NAV ─────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 800;
+      padding: 1.6rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background .4s, backdrop-filter .4s;
+    }
+    nav.scrolled {
+      background: rgba(0,0,0,.85);
+      backdrop-filter: blur(14px);
+    }
+    .nav-logo {
+      font-family: var(--fd);
+      font-size: 1.4rem; font-weight: 900;
+      letter-spacing: .18em;
+      color: #fff; text-decoration: none;
+    }
+    .nav-r {
+      display: flex; align-items: center; gap: 2rem;
+    }
+    .nav-tag {
+      font-family: var(--fm);
+      font-size: .65rem; letter-spacing: .25em;
+      color: var(--gr); text-transform: uppercase;
+    }
+    .nav-btn {
+      font-family: var(--fm);
+      font-size: .65rem; letter-spacing: .18em;
+      color: #fff; text-decoration: none; text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,.25);
+      padding: .55rem 1.3rem; border-radius: 2px;
+      transition: background .3s, color .3s, border-color .3s;
+      cursor: none;
+    }
+    .nav-btn:hover { background: #fff; color: #000; border-color: #fff; }
+
+    /* ── THREE.JS CANVAS ─────────────────────── */
+    #bg {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── HERO ────────────────────────────────── */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100svh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 6rem 2rem 3rem;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      border: 1px solid rgba(255,255,255,.12); border-radius: 100px;
+      padding: .38rem 1.1rem;
+      font-family: var(--fm); font-size: .62rem;
+      letter-spacing: .22em; color: var(--gr); text-transform: uppercase;
+      margin-bottom: 2.5rem; opacity: 0;
+    }
+    .badge-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: #fff;
+      animation: dotPulse 2.4s ease-in-out infinite;
+    }
+    @keyframes dotPulse {
+      0%,100%{opacity:.25;transform:scale(1)}
+      50%{opacity:1;transform:scale(1.4)}
+    }
+    .hero-title {
+      font-family: var(--fd);
+      font-size: clamp(5rem, 22vw, 19rem);
+      font-weight: 900;
+      line-height: .82;
+      letter-spacing: -.01em;
+      overflow: hidden;
+    }
+    .hero-title span { display: block; transform: translateY(110%); }
+    .hero-sub {
+      font-family: var(--fm); font-size: clamp(.6rem, 1.6vw, .82rem);
+      letter-spacing: .32em; color: var(--gr); text-transform: uppercase;
+      margin-top: 2.2rem; opacity: 0;
+    }
+    .hero-scroll {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .7rem;
+      opacity: 0;
+    }
+    .hero-scroll p {
+      font-family: var(--fm); font-size: .58rem;
+      letter-spacing: .28em; color: var(--gr); text-transform: uppercase;
+    }
+    .s-line {
+      width: 1px; height: 52px;
+      background: linear-gradient(to bottom, rgba(255,255,255,.4), transparent);
+      animation: sAnim 2s ease-in-out infinite;
+    }
+    @keyframes sAnim {
+      0%,100%{opacity:.2;transform:scaleY(1)}
+      50%{opacity:.7;transform:scaleY(.6) translateY(20px)}
+    }
+
+    /* ── MARQUEE ─────────────────────────────── */
+    .mq {
+      position: relative; z-index: 1;
+      overflow: hidden; padding: 1.2rem 0;
+      border-top: 1px solid rgba(255,255,255,.05);
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .mq-track {
+      display: flex; gap: 2.5rem;
+      white-space: nowrap;
+      animation: mqRoll 22s linear infinite;
+    }
+    .mq-track.rev { animation-direction: reverse; animation-duration: 18s; }
+    .mq-item {
+      font-family: var(--fd); font-weight: 700;
+      font-size: clamp(.85rem, 1.8vw, 1.15rem);
+      letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(255,255,255,.14); flex-shrink: 0;
+    }
+    .mq-item.hi { color: rgba(255,255,255,.55); }
+    @keyframes mqRoll {
+      from{transform:translateX(0)}
+      to{transform:translateX(-50%)}
+    }
+
+    /* ── COUNTDOWN ───────────────────────────── */
+    .cd-sec {
+      position: relative; z-index: 1;
+      padding: clamp(4rem,12vw,9rem) 2.5rem;
+      text-align: center;
+    }
+    .sec-label {
+      font-family: var(--fm); font-size: .65rem;
+      letter-spacing: .38em; color: var(--gr); text-transform: uppercase;
+      margin-bottom: 3.5rem;
+    }
+    .cd-grid {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: clamp(.5rem,1.5vw,1rem);
+      max-width: 680px; margin: 0 auto;
+    }
+    .cd-cell {
+      padding: clamp(1rem,3vw,2.2rem) clamp(.5rem,2vw,1rem);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 3px;
+      background: rgba(255,255,255,.02);
+      backdrop-filter: blur(4px);
+    }
+    .cd-n {
+      font-family: var(--fd);
+      font-size: clamp(2.2rem,8vw,5rem); font-weight: 900;
+      color: #fff; line-height: 1; display: block;
+    }
+    .cd-l {
+      font-family: var(--fm); font-size: .58rem;
+      letter-spacing: .28em; color: var(--gr); text-transform: uppercase;
+      margin-top: .5rem; display: block;
+    }
+
+    /* ── MANIFESTO ───────────────────────────── */
+    .manifesto {
+      position: relative; z-index: 1;
+      padding: clamp(5rem,14vw,12rem) 2.5rem;
+    }
+    .m-text {
+      font-family: var(--fd);
+      font-size: clamp(2.2rem, 7.5vw, 7.5rem);
+      font-weight: 900; line-height: .88;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .m-line { overflow: hidden; display: block; }
+    .m-inner { display: block; transform: translateY(105%); }
+    .m-dim { color: rgba(255,255,255,.12); }
+
+    /* ── PRODUCTS PREVIEW ────────────────────── */
+    .products {
+      position: relative; z-index: 1;
+      padding: clamp(3rem,8vw,7rem) 2.5rem;
+    }
+    .p-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      max-width: 1160px; margin: 0 auto 1.5rem;
+    }
+    .p-title {
+      font-family: var(--fd);
+      font-size: clamp(2rem, 5vw, 4.5rem); font-weight: 900;
+    }
+    .p-status {
+      font-family: var(--fm); font-size: .65rem;
+      letter-spacing: .22em; color: var(--gr); text-transform: uppercase;
+    }
+    .p-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; max-width: 1160px; margin: 0 auto;
+      background: rgba(255,255,255,.06);
+    }
+    .p-card {
+      position: relative;
+      aspect-ratio: 3/4; background: var(--bg2);
+      overflow: hidden; cursor: none;
+      transform-style: preserve-3d;
+      transition: transform .5s cubic-bezier(.16,1,.3,1);
+    }
+    .p-inner {
+      position: absolute; inset: 0;
+      background: var(--bg3);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform .6s cubic-bezier(.16,1,.3,1);
+    }
+    .p-card:hover .p-inner { transform: scale(1.04); }
+    .p-ph {
+      font-family: var(--fd);
+      font-size: clamp(4rem,8vw,7rem); font-weight: 900;
+      color: rgba(255,255,255,.04);
+      user-select: none;
+    }
+    .p-over {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(2px);
+      gap: .75rem;
+    }
+    .p-tag {
+      font-family: var(--fm); font-size: .62rem;
+      letter-spacing: .28em; color: rgba(255,255,255,.55);
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,.18); padding: .38rem .9rem;
+    }
+    .p-soon {
+      font-family: var(--fd); font-size: 1.3rem;
+      font-weight: 700; color: rgba(255,255,255,.25);
+    }
+
+    /* ── STATS ───────────────────────────────── */
+    .stats {
+      position: relative; z-index: 1;
+      border-top: 1px solid rgba(255,255,255,.06);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      display: grid; grid-template-columns: repeat(3,1fr);
+      text-align: center;
+    }
+    .st {
+      padding: clamp(1.5rem,4vw,2.8rem) 1rem;
+      border-right: 1px solid rgba(255,255,255,.06);
+    }
+    .st:last-child { border-right: none; }
+    .st-n {
+      font-family: var(--fd);
+      font-size: clamp(2.2rem,5vw,3.8rem); font-weight: 900;
+    }
+    .st-l {
+      font-family: var(--fm); font-size: .58rem;
+      letter-spacing: .28em; color: var(--gr); text-transform: uppercase;
+      margin-top: .3rem;
+    }
+
+    /* ── WAITLIST ────────────────────────────── */
+    .waitlist {
+      position: relative; z-index: 1;
+      padding: clamp(6rem,16vw,13rem) 2.5rem;
+      text-align: center;
+    }
+    .wl-ey {
+      font-family: var(--fm); font-size: .65rem;
+      letter-spacing: .38em; color: var(--gr); text-transform: uppercase;
+      margin-bottom: 2rem; opacity: 0; transform: translateY(20px);
+    }
+    .wl-title {
+      font-family: var(--fd);
+      font-size: clamp(3.5rem, 12vw, 9rem); font-weight: 900;
+      line-height: .88; margin-bottom: 2.5rem;
+      opacity: 0; transform: translateY(30px);
+    }
+    .wl-sub {
+      font-family: var(--fb); font-size: clamp(.88rem,1.8vw,1.05rem);
+      font-weight: 300; color: var(--gr);
+      max-width: 480px; margin: 0 auto 3rem; line-height: 1.75;
+      opacity: 0; transform: translateY(20px);
+    }
+    .wl-form {
+      display: flex; max-width: 520px; margin: 0 auto;
+      border: 1px solid rgba(255,255,255,.15);
+      transition: border-color .3s, box-shadow .3s;
+      opacity: 0; transform: translateY(20px);
+    }
+    .wl-form:focus-within {
+      border-color: rgba(255,255,255,.4);
+      box-shadow: 0 0 40px rgba(255,255,255,.04);
+    }
+    .wl-inp {
+      flex: 1; background: transparent; border: none; outline: none;
+      padding: 1.1rem 1.3rem;
+      color: #fff; font-family: var(--fb); font-size: .92rem;
+    }
+    .wl-inp::placeholder { color: rgba(255,255,255,.22); }
+    .wl-submit {
+      background: #fff; color: #000; border: none;
+      padding: 1.1rem 1.9rem;
+      font-family: var(--fm); font-size: .65rem; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase;
+      cursor: none; white-space: nowrap;
+      transition: background .3s;
+    }
+    .wl-submit:hover { background: #ddd; }
+    .wl-note {
+      font-family: var(--fm); font-size: .58rem;
+      letter-spacing: .18em; color: rgba(255,255,255,.18);
+      text-transform: uppercase; margin-top: 1.3rem;
+    }
+    .wl-ok {
+      display: none; max-width: 520px; margin: 0 auto;
+      border: 1px solid rgba(255,255,255,.15);
+      padding: 1.2rem 1.5rem;
+      font-family: var(--fm); font-size: .75rem;
+      letter-spacing: .2em; text-transform: uppercase;
+    }
+
+    /* ── FOOTER ──────────────────────────────── */
+    footer {
+      position: relative; z-index: 1;
+      padding: 2.5rem 2.5rem;
+      border-top: 1px solid rgba(255,255,255,.06);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+    .f-logo {
+      font-family: var(--fd); font-size: 1.2rem;
+      font-weight: 900; letter-spacing: .18em;
+    }
+    .f-links { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .f-link {
+      font-family: var(--fm); font-size: .6rem;
+      letter-spacing: .2em; color: var(--gr);
+      text-decoration: none; text-transform: uppercase;
+      transition: color .3s; cursor: none;
+    }
+    .f-link:hover { color: #fff; }
+    .f-copy {
+      font-family: var(--fm); font-size: .58rem;
+      letter-spacing: .1em; color: rgba(255,255,255,.12);
+    }
+
+    /* ── NOISE OVERLAY ───────────────────────── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 5;
+      pointer-events: none; opacity: .028;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── REVEAL UTIL ─────────────────────────── */
+    .rv { opacity: 0; transform: translateY(28px); }
+
+    /* ── MOBILE ──────────────────────────────── */
+    @media(max-width:768px){
+      nav { padding: 1.25rem 1.5rem; }
+      .nav-r { display: none; }
+      .cur, .cur-f { display: none; }
+      body { cursor: auto; }
+      .wl-submit { cursor: pointer; }
+      .nav-btn { cursor: pointer; }
+      .f-link { cursor: pointer; }
+
+      .p-grid { grid-template-columns: repeat(2,1fr); }
+      .p-header { flex-direction: column; align-items: flex-start; gap: .5rem; }
+      .cd-grid { gap: .4rem; }
+      .wl-form { flex-direction: column; }
+      .wl-inp { text-align: center; border-bottom: 1px solid rgba(255,255,255,.1); }
+      .wl-submit { padding: 1rem; cursor: pointer; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .st:nth-child(2) { border-right: none; }
+      .st:nth-child(3) { border-right: none; border-top: 1px solid rgba(255,255,255,.06); grid-column: span 2; }
+      footer { flex-direction: column; align-items: center; text-align: center; }
+      .f-links { justify-content: center; }
+      .m-text { font-size: clamp(2rem, 9vw, 4rem); }
+    }
+    @media(max-width:480px){
+      .p-grid { grid-template-columns: 1fr; }
+      .p-card { aspect-ratio: 4/3; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cur" id="cur"></div>
+<div class="cur-f" id="curf"></div>
+
+<!-- Loader -->
+<div id="loader">
+  <div id="loader-txt">ZUKUNFT</div>
+  <div id="loader-bar"></div>
+</div>
+
+<!-- Background canvas -->
+<canvas id="bg"></canvas>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">ZUKUNFT</a>
+  <div class="nav-r">
+    <span class="nav-tag">DROP 01 &mdash; BALD VERFÜGBAR</span>
+    <a href="#warteliste" class="nav-btn">Warteliste</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge" id="hbadge">
+    <div class="badge-dot"></div>
+    DROP 01 &nbsp;—&nbsp; Kommt bald
+  </div>
+  <div class="hero-title" id="htitle"><span id="hspan">ZUKUNFT</span></div>
+  <p class="hero-sub" id="hsub">Authentisch &nbsp;·&nbsp; Bold &nbsp;·&nbsp; Ungefiltert</p>
+  <div class="hero-scroll" id="hscroll">
+    <p>Scrollen</p>
+    <div class="s-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE 1 -->
+<div class="mq">
+  <div class="mq-track" id="mq1">
+    <span class="mq-item hi">ZUKUNFT</span><span class="mq-item">DROP 01</span>
+    <span class="mq-item hi">STRASSEN HABEN UNS GEMACHT</span><span class="mq-item">STIL DEFINIERT UNS</span>
+    <span class="mq-item hi">AUTHENTISCH</span><span class="mq-item">BOLD</span>
+    <span class="mq-item hi">UNGEFILTERT</span><span class="mq-item">ART IS LOVE</span>
+    <span class="mq-item hi">ZUKUNFT</span><span class="mq-item">DROP 01</span>
+    <span class="mq-item hi">STRASSEN HABEN UNS GEMACHT</span><span class="mq-item">STIL DEFINIERT UNS</span>
+    <span class="mq-item hi">AUTHENTISCH</span><span class="mq-item">BOLD</span>
+    <span class="mq-item hi">UNGEFILTERT</span><span class="mq-item">ART IS LOVE</span>
+  </div>
+</div>
+
+<!-- COUNTDOWN -->
+<section class="cd-sec">
+  <p class="sec-label rv">DROP 01 — Countdown</p>
+  <div class="cd-grid">
+    <div class="cd-cell rv"><span class="cd-n" id="cd-d">00</span><span class="cd-l">Tage</span></div>
+    <div class="cd-cell rv"><span class="cd-n" id="cd-h">00</span><span class="cd-l">Stunden</span></div>
+    <div class="cd-cell rv"><span class="cd-n" id="cd-m">00</span><span class="cd-l">Minuten</span></div>
+    <div class="cd-cell rv"><span class="cd-n" id="cd-s">00</span><span class="cd-l">Sekunden</span></div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto">
+  <div class="m-text" id="mani">
+    <span class="m-line"><span class="m-inner">STRASSEN</span></span>
+    <span class="m-line"><span class="m-inner m-dim">HABEN</span></span>
+    <span class="m-line"><span class="m-inner">UNS</span></span>
+    <span class="m-line"><span class="m-inner m-dim">GEMACHT.</span></span>
+    <span class="m-line"><span class="m-inner">STIL</span></span>
+    <span class="m-line"><span class="m-inner m-dim">DEFINIERT</span></span>
+    <span class="m-line"><span class="m-inner">UNS.</span></span>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products">
+  <div class="p-header">
+    <h2 class="p-title rv">DROP 01<br>VORSCHAU</h2>
+    <p class="p-status rv">Bald verfügbar</p>
+  </div>
+  <div class="p-grid">
+    <div class="p-card" id="pc1">
+      <div class="p-inner"><div class="p-ph">Z</div></div>
+      <div class="p-over"><div class="p-tag">T-Shirt</div><div class="p-soon">— — —</div></div>
+    </div>
+    <div class="p-card" id="pc2">
+      <div class="p-inner"><div class="p-ph">K</div></div>
+      <div class="p-over"><div class="p-tag">Hoodie</div><div class="p-soon">— — —</div></div>
+    </div>
+    <div class="p-card" id="pc3">
+      <div class="p-inner"><div class="p-ph">N</div></div>
+      <div class="p-over"><div class="p-tag">Jogger</div><div class="p-soon">— — —</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="st"><div class="st-n rv">01</div><div class="st-l">Erster Drop</div></div>
+  <div class="st"><div class="st-n rv" id="wl-count">—</div><div class="st-l">Auf der Warteliste</div></div>
+  <div class="st"><div class="st-n rv">∞</div><div class="st-l">Ambition</div></div>
+</div>
+
+<!-- MARQUEE 2 -->
+<div class="mq">
+  <div class="mq-track rev">
+    <span class="mq-item hi">ZUKUNFT</span><span class="mq-item">BOLD</span>
+    <span class="mq-item hi">ART IS LOVE</span><span class="mq-item">DROP 01</span>
+    <span class="mq-item hi">UNGEFILTERT</span><span class="mq-item">ZUKUNFT</span>
+    <span class="mq-item hi">BOLD</span><span class="mq-item">ART IS LOVE</span>
+    <span class="mq-item hi">DROP 01</span><span class="mq-item">UNGEFILTERT</span>
+    <span class="mq-item hi">ZUKUNFT</span><span class="mq-item">BOLD</span>
+    <span class="mq-item hi">ART IS LOVE</span><span class="mq-item">DROP 01</span>
+    <span class="mq-item hi">UNGEFILTERT</span><span class="mq-item">ZUKUNFT</span>
+    <span class="mq-item hi">BOLD</span><span class="mq-item">ART IS LOVE</span>
+  </div>
+</div>
+
+<!-- WAITLIST -->
+<section class="waitlist" id="warteliste">
+  <p class="wl-ey" id="wley">Warteliste</p>
+  <h2 class="wl-title" id="wltitle">SEI DER<br>ERSTE.</h2>
+  <p class="wl-sub" id="wlsub">
+    DROP 01 erscheint in limitierter Auflage. Trag dich jetzt ein und erhalte als Erster Zugang — bevor es für alle verfügbar wird.
+  </p>
+  <div class="wl-form" id="wlform">
+    <input type="email" class="wl-inp" id="wlinp" placeholder="deine@email.de" aria-label="E-Mail Adresse">
+    <button class="wl-submit" onclick="doWaitlist()">Eintragen</button>
+  </div>
+  <div class="wl-ok" id="wlok">✓ &nbsp; Du bist dabei — wir melden uns bald.</div>
+  <p class="wl-note">Kein Spam. Ausschließlich Drop-News.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-logo">ZUKUNFT</div>
+  <div class="f-links">
+    <a href="#" class="f-link">Instagram</a>
+    <a href="#" class="f-link">TikTok</a>
+    <a href="#" class="f-link">Datenschutz</a>
+    <a href="#" class="f-link">Impressum</a>
+    <a href="#warteliste" class="f-link">Warteliste</a>
+  </div>
+  <div class="f-copy">© 2025 ZUKUNFT. Alle Rechte vorbehalten.</div>
+</footer>
+
+<!-- Three.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<script>
+'use strict';
+gsap.registerPlugin(ScrollTrigger);
+
+/* ── CURSOR ──────────────────────────────────── */
+const cur = document.getElementById('cur');
+const curf = document.getElementById('curf');
+let mx = 0, my = 0, fx = 0, fy = 0;
+const isMobile = window.innerWidth < 768;
+
+if (!isMobile) {
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cur.style.left = mx + 'px';
+    cur.style.top  = my + 'px';
+  });
+  (function follow() {
+    fx += (mx - fx) * .13;
+    fy += (my - fy) * .13;
+    curf.style.left = fx + 'px';
+    curf.style.top  = fy + 'px';
+    requestAnimationFrame(follow);
+  })();
+  document.querySelectorAll('a,button,.p-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cur.style.width = cur.style.height = '18px';
+      curf.style.width = curf.style.height = '58px';
+      curf.style.borderColor = 'rgba(255,255,255,.6)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cur.style.width = cur.style.height = '8px';
+      curf.style.width = curf.style.height = '36px';
+      curf.style.borderColor = 'rgba(255,255,255,.35)';
+    });
+  });
+}
+
+/* ── THREE.JS PARTICLES ──────────────────────── */
+(function initThree() {
+  const canvas = document.getElementById('bg');
+  const scene = new THREE.Scene();
+  const cam = new THREE.PerspectiveCamera(70, innerWidth/innerHeight, .1, 1000);
+  cam.position.z = 5;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setClearColor(0x000000, 0);
+
+  const COUNT = isMobile ? 600 : 1800;
+  const pos = new Float32Array(COUNT * 3);
+  const vel = [];
+  for (let i = 0; i < COUNT; i++) {
+    pos[i*3]   = (Math.random()-.5)*22;
+    pos[i*3+1] = (Math.random()-.5)*22;
+    pos[i*3+2] = (Math.random()-.5)*10;
+    vel.push({ x:(Math.random()-.5)*.0018, y:(Math.random()-.5)*.0018 });
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+
+  const mat = new THREE.PointsMaterial({
+    color: 0xffffff, size: .014,
+    transparent: true, opacity: .45, sizeAttenuation: true
+  });
+  const pts = new THREE.Points(geo, mat);
+  scene.add(pts);
+
+  let trx = 0, try_ = 0, crx = 0, cry = 0, tick = 0;
+  if (!isMobile) {
+    document.addEventListener('mousemove', e => {
+      trx = ((e.clientX/innerWidth)-.5)*.4;
+      try_ = ((e.clientY/innerHeight)-.5)*.4;
+    });
+  }
+
+  (function loop() {
+    requestAnimationFrame(loop);
+    tick++;
+    const p = geo.attributes.position.array;
+    for (let i = 0; i < COUNT; i++) {
+      p[i*3]   += vel[i].x;
+      p[i*3+1] += vel[i].y;
+      if (p[i*3] >  11) p[i*3] = -11;
+      if (p[i*3] < -11) p[i*3] =  11;
+      if (p[i*3+1] >  11) p[i*3+1] = -11;
+      if (p[i*3+1] < -11) p[i*3+1] =  11;
+    }
+    geo.attributes.position.needsUpdate = true;
+    crx += (trx - crx) * .04;
+    cry += (try_ - cry) * .04;
+    pts.rotation.y = crx;
+    pts.rotation.x = cry;
+    pts.rotation.z = tick * .00008;
+    renderer.render(scene, cam);
+  })();
+
+  window.addEventListener('resize', () => {
+    cam.aspect = innerWidth/innerHeight;
+    cam.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+  });
+})();
+
+/* ── LOADER ──────────────────────────────────── */
+window.addEventListener('load', () => {
+  const ltxt = document.getElementById('loader-txt');
+  const lbar = document.getElementById('loader-bar');
+  const loader = document.getElementById('loader');
+
+  gsap.to(ltxt, { opacity:1, duration:.5, ease:'power2.out', onComplete() {
+    lbar.style.width = '220px';
+    setTimeout(() => {
+      gsap.to(loader, {
+        yPercent: -100, duration: .9, delay: .5,
+        ease: 'power3.inOut',
+        onComplete() {
+          loader.style.display = 'none';
+          heroIn();
+        }
+      });
+    }, 900);
+  }});
+});
+
+/* ── HERO ANIMATION ──────────────────────────── */
+function heroIn() {
+  const tl = gsap.timeline();
+  tl.to('#hspan',   { y: 0, duration: 1.3, ease: 'power4.out' })
+    .to('#hbadge',  { opacity:1, y:0, duration:.8, ease:'power3.out' }, '-=1')
+    .to('#hsub',    { opacity:1, duration:.8, ease:'power3.out' }, '-=.5')
+    .to('#hscroll', { opacity:1, duration:.6, ease:'power3.out' }, '-=.3');
+}
+
+/* ── NAV SCROLL ──────────────────────────────── */
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', scrollY > 80);
+}, { passive:true });
+
+/* ── MANIFESTO REVEAL ────────────────────────── */
+document.querySelectorAll('.m-inner').forEach((el, i) => {
+  gsap.to(el, {
+    y: 0, duration: .9, delay: i * .06, ease: 'power3.out',
+    scrollTrigger: { trigger: el.parentElement, start: 'top 88%' }
+  });
+});
+
+/* ── GENERIC REVEALS ─────────────────────────── */
+gsap.utils.toArray('.rv').forEach(el => {
+  gsap.to(el, {
+    opacity:1, y:0, duration:.8, ease:'power3.out',
+    scrollTrigger: { trigger:el, start:'top 88%' }
+  });
+});
+
+/* ── WAITLIST SECTION REVEALS ────────────────── */
+[
+  { id:'wley',    delay:0 },
+  { id:'wltitle', delay:.1 },
+  { id:'wlsub',   delay:.2 },
+  { id:'wlform',  delay:.3 },
+].forEach(({id, delay}) => {
+  gsap.to('#'+id, {
+    opacity:1, y:0, duration:.8, delay, ease:'power3.out',
+    scrollTrigger: { trigger:'#warteliste', start:'top 75%' }
+  });
+});
+
+/* ── PRODUCT CARD 3D TILT ────────────────────── */
+if (!isMobile) {
+  document.querySelectorAll('.p-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width  - .5;
+      const y = (e.clientY - r.top)  / r.height - .5;
+      card.style.transform = `perspective(900px) rotateY(${x*10}deg) rotateX(${-y*10}deg)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(900px) rotateY(0) rotateX(0)';
+    });
+  });
+}
+
+/* ── COUNTDOWN ───────────────────────────────── */
+const dropDate = new Date();
+dropDate.setDate(dropDate.getDate() + 75);
+
+function pad(n) { return String(n).padStart(2,'0'); }
+function tick() {
+  const d = dropDate - Date.now();
+  if (d < 0) return;
+  document.getElementById('cd-d').textContent = pad(Math.floor(d/864e5));
+  document.getElementById('cd-h').textContent = pad(Math.floor((d%864e5)/36e5));
+  document.getElementById('cd-m').textContent = pad(Math.floor((d%36e5)/6e4));
+  document.getElementById('cd-s').textContent = pad(Math.floor((d%6e4)/1e3));
+}
+tick(); setInterval(tick, 1000);
+
+/* ── WAITLIST COUNT ──────────────────────────── */
+let wlCount = Math.floor(Math.random()*180) + 140;
+document.getElementById('wl-count').textContent = wlCount;
+
+/* ── WAITLIST SUBMIT ─────────────────────────── */
+window.doWaitlist = function() {
+  const inp = document.getElementById('wlinp');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inp.value)) {
+    gsap.to('#wlform', { x: -8, duration:.05, yoyo:true, repeat:5, ease:'none' });
+    return;
+  }
+  const form = document.getElementById('wlform');
+  const ok   = document.getElementById('wlok');
+  gsap.to(form, { opacity:0, y:-10, duration:.3, ease:'power2.in', onComplete() {
+    form.style.display = 'none';
+    ok.style.display = 'block';
+    gsap.from(ok, { opacity:0, y:10, duration:.5, ease:'power3.out' });
+    wlCount++;
+    document.getElementById('wl-count').textContent = wlCount;
+  }});
+};
+document.getElementById('wlinp').addEventListener('keydown', e => {
+  if (e.key === 'Enter') window.doWaitlist();
+});
+</script>
+</body>
+</html>
