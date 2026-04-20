@@ -1,0 +1,9 @@
+{
+  "name": "zukunft-waitlist",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Zukunft — Drop 01 Waitlist",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.47.0"
+  }
+}
