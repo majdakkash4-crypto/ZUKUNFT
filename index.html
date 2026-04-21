@@ -338,6 +338,72 @@
   footer a{color:var(--fg-muted);text-decoration:none;transition:color .3s}
   footer a:hover{color:var(--fg)}
 
+  /* ─── MODAL ──────────────────────────── */
+  .modal-overlay{
+    position:fixed;inset:0;z-index:200;
+    background:rgba(10,10,10,0.88);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    display:none;align-items:flex-start;justify-content:center;
+    padding:80px 20px 40px;overflow-y:auto;
+    opacity:0;transition:opacity .5s cubic-bezier(.2,.6,.1,1);
+  }
+  .modal-overlay.show{display:flex;opacity:1}
+  .modal{
+    max-width:640px;width:100%;
+    border:.5px solid var(--line-2);
+    background:var(--bg);
+    padding:56px 44px 44px;position:relative;
+    transform:translateY(20px);transition:transform .6s cubic-bezier(.2,.6,.1,1);
+  }
+  .modal-overlay.show .modal{transform:translateY(0)}
+  .modal-close{
+    position:absolute;top:22px;right:28px;
+    background:none;border:none;cursor:pointer;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;letter-spacing:.34em;text-transform:uppercase;
+    color:var(--fg-muted);transition:color .3s ease;
+    padding:4px;
+  }
+  .modal-close:hover{color:var(--fg)}
+  .modal-eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;letter-spacing:.42em;text-transform:uppercase;
+    color:var(--fg-muted);margin-bottom:1.2rem;
+    display:inline-flex;align-items:center;gap:14px;
+  }
+  .modal-eyebrow::before{content:'';width:24px;height:.5px;background:var(--line-2)}
+  .modal-title{
+    font-family:'Unbounded',sans-serif;font-weight:300;
+    font-size:28px;letter-spacing:-.02em;
+    color:var(--fg);margin-bottom:2.4rem;
+  }
+  .modal-section{margin-bottom:1.8rem}
+  .modal-section:last-child{margin-bottom:0}
+  .modal-section h3{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--fg-muted);margin-bottom:.9rem;font-weight:400;
+  }
+  .modal-section p{
+    font-family:'Unbounded',sans-serif;font-weight:300;
+    font-size:13px;line-height:1.85;color:var(--fg-soft);
+    margin-bottom:.6rem;
+  }
+  .modal-section p:last-child{margin-bottom:0}
+  .modal-section a{
+    color:var(--fg);text-decoration:none;
+    border-bottom:.5px solid var(--line-2);
+    transition:border-color .3s ease;
+  }
+  .modal-section a:hover{border-color:var(--fg)}
+  .modal-note{
+    font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:300;
+    font-size:12px;line-height:1.7;color:var(--fg-muted);
+    padding-top:1.4rem;margin-top:1.8rem;
+    border-top:.5px solid var(--line);
+  }
+  body.modal-open{overflow:hidden}
+
   /* ─── RESPONSIVE ─────────────────────── */
   @media (max-width:760px){
     .nav{grid-template-columns:1fr 1fr;padding:14px 18px;font-size:9px;letter-spacing:.22em;gap:1rem}
@@ -353,6 +419,10 @@
     footer .fl,footer .fc,footer .fr{text-align:center;justify-content:center}
     .side{display:none}
     .ticker-track{font-size:9px;letter-spacing:.24em;gap:2rem}
+    .modal{padding:44px 24px 32px}
+    .modal-close{top:16px;right:18px}
+    .modal-title{font-size:22px;margin-bottom:1.8rem}
+    .modal-overlay{padding:60px 14px 30px}
   }
 </style>
 </head>
@@ -486,10 +556,136 @@
   <div class="fl">© Zukunft</div>
   <div class="fc">Münster</div>
   <div class="fr">
-    <a href="#">Instagram</a>
-    <a href="#">Impressum</a>
+    <a href="https://instagram.com/zukunft.clothing" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <a href="#" data-modal="impressum">Impressum</a>
+    <a href="#" data-modal="datenschutz">Datenschutz</a>
   </div>
 </footer>
+
+<!-- ── MODAL · IMPRESSUM ───────────────── -->
+<div class="modal-overlay" id="modal-impressum" role="dialog" aria-labelledby="impressum-title" aria-modal="true">
+  <div class="modal">
+    <button class="modal-close" data-close aria-label="Schließen">Schließen ×</button>
+    <div class="modal-eyebrow">Rechtliches</div>
+    <h2 class="modal-title" id="impressum-title">Impressum</h2>
+
+    <div class="modal-section">
+      <h3>Angaben gemäß § 5 TMG</h3>
+      <p>
+        [DEIN VOR- UND NACHNAME]<br>
+        [STRASSE UND HAUSNUMMER]<br>
+        [PLZ MÜNSTER]<br>
+        Deutschland
+      </p>
+    </div>
+
+    <div class="modal-section">
+      <h3>Kontakt</h3>
+      <p>
+        E-Mail: <a href="mailto:[DEINE EMAIL]">[DEINE EMAIL]</a>
+      </p>
+    </div>
+
+    <div class="modal-section">
+      <h3>Verantwortlich für den Inhalt gem. § 18 Abs. 2 MStV</h3>
+      <p>
+        [DEIN VOR- UND NACHNAME]<br>
+        [STRASSE UND HAUSNUMMER]<br>
+        [PLZ MÜNSTER]
+      </p>
+    </div>
+
+    <div class="modal-section">
+      <h3>Streitschlichtung</h3>
+      <p>
+        Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:
+        <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>.
+      </p>
+      <p>
+        Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
+      </p>
+    </div>
+
+    <div class="modal-section">
+      <h3>Haftung für Inhalte</h3>
+      <p>
+        Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL · DATENSCHUTZ ─────────────── -->
+<div class="modal-overlay" id="modal-datenschutz" role="dialog" aria-labelledby="datenschutz-title" aria-modal="true">
+  <div class="modal">
+    <button class="modal-close" data-close aria-label="Schließen">Schließen ×</button>
+    <div class="modal-eyebrow">Datenschutz</div>
+    <h2 class="modal-title" id="datenschutz-title">Datenschutzerklärung</h2>
+
+    <div class="modal-section">
+      <h3>Verantwortlicher</h3>
+      <p>
+        [DEIN VOR- UND NACHNAME]<br>
+        [STRASSE UND HAUSNUMMER]<br>
+        [PLZ MÜNSTER]<br>
+        E-Mail: <a href="mailto:[DEINE EMAIL]">[DEINE EMAIL]</a>
+      </p>
+    </div>
+
+    <div class="modal-section">
+      <h3>Welche Daten wir erheben</h3>
+      <p>
+        Bei der Anmeldung zur Warteliste erheben wir ausschließlich Ihre E-Mail-Adresse sowie das Datum der Anmeldung. Darüber hinaus werden keine weiteren personenbezogenen Daten gespeichert.
+      </p>
+    </div>
+
+    <div class="modal-section">
+      <h3>Zweck der Verarbeitung</h3>
+      <p>
+        Ihre E-Mail-Adresse wird ausschließlich verwendet, um Sie einmalig über den Release von Drop 01 zu informieren. Eine Weitergabe an Dritte zu Werbezwecken findet nicht statt.
+      </p>
+    </div>
+
+    <div class="modal-section">
+      <h3>Rechtsgrundlage</h3>
+      <p>
+        Die Verarbeitung erfolgt auf Grundlage Ihrer ausdrücklichen Einwilligung gemäß Art. 6 Abs. 1 lit. a DSGVO, die Sie mit der Anmeldung zur Warteliste erteilen.
+      </p>
+    </div>
+
+    <div class="modal-section">
+      <h3>Auftragsverarbeiter</h3>
+      <p>
+        Zur technischen Bereitstellung der Seite und Speicherung Ihrer Daten nutzen wir folgende Dienstleister:
+      </p>
+      <p>
+        Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA (Hosting)<br>
+        Supabase Inc., 970 Toa Payoh North #07-04, Singapore 318992 (Datenbank, EU-Region Frankfurt)
+      </p>
+    </div>
+
+    <div class="modal-section">
+      <h3>Speicherdauer</h3>
+      <p>
+        Ihre E-Mail-Adresse wird bis zum Widerruf Ihrer Einwilligung gespeichert. Spätestens nach Abschluss des Release-Prozesses und der Benachrichtigung werden die Daten gelöscht.
+      </p>
+    </div>
+
+    <div class="modal-section">
+      <h3>Ihre Rechte</h3>
+      <p>
+        Sie haben jederzeit das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit sowie Widerspruch. Zudem können Sie Ihre Einwilligung jederzeit widerrufen. Eine formlose Nachricht an <a href="mailto:[DEINE EMAIL]">[DEINE EMAIL]</a> genügt.
+      </p>
+      <p>
+        Ihnen steht zudem ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu (in NRW: Landesbeauftragte für Datenschutz und Informationsfreiheit Nordrhein-Westfalen).
+      </p>
+    </div>
+
+    <p class="modal-note">
+      Diese Erklärung wurde zuletzt im April 2026 aktualisiert.
+    </p>
+  </div>
+</div>
 
 <script>
   // ─── Loader ──────────────────────
@@ -528,6 +724,11 @@
       return;
     }
 
+    // Erkennen ob wir lokal laufen (file:// oder localhost)
+    const isLocal = !window.location.hostname ||
+                    window.location.hostname === 'localhost' ||
+                    window.location.hostname === '127.0.0.1';
+
     // An Vercel Serverless Function senden
     let position;
     try {
@@ -540,10 +741,17 @@
       const data = await res.json();
       position = data.position;
     } catch (err) {
-      console.warn('Anmeldung fehlgeschlagen:', err);
-      form.classList.add('error');
-      setTimeout(() => form.classList.remove('error'), 500);
-      return;
+      if (isLocal) {
+        // Lokaler Test: zeige Fake-Erfolg
+        console.info('[Demo-Modus] API nicht erreichbar — simuliere Position.');
+        position = 247 + Math.floor(Math.random() * 40);
+      } else {
+        // Live-Seite: echten Fehler anzeigen
+        console.warn('Anmeldung fehlgeschlagen:', err);
+        form.classList.add('error');
+        setTimeout(() => form.classList.remove('error'), 500);
+        return;
+      }
     }
 
     signup.style.display = 'none';
@@ -557,6 +765,41 @@
   // ─── FAQ ─────────────────────────
   document.querySelectorAll('.faq-item').forEach(item => {
     item.addEventListener('click', () => item.classList.toggle('open'));
+  });
+
+  // ─── Modals ──────────────────────
+  const openModal = (id) => {
+    const m = document.getElementById('modal-' + id);
+    if (!m) return;
+    m.classList.add('show');
+    document.body.classList.add('modal-open');
+  };
+  const closeModals = () => {
+    document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show'));
+    document.body.classList.remove('modal-open');
+  };
+
+  document.querySelectorAll('[data-modal]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      openModal(link.dataset.modal);
+    });
+  });
+
+  document.querySelectorAll('[data-close]').forEach(btn => {
+    btn.addEventListener('click', closeModals);
+  });
+
+  // Klick außerhalb schließt das Modal
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeModals();
+    });
+  });
+
+  // ESC schließt das Modal
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModals();
   });
 </script>
 </body>
