@@ -3,9 +3,11 @@
 
 import { createClient } from '@supabase/supabase-js';
 
+// SUPABASE_SECRET_KEY = neuer Name ("sb_secret_...")
+// Bei älteren Projekten heißt er noch "service_role" — beide funktionieren.
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+  process.env.SUPABASE_SECRET_KEY
 );
 
 export default async function handler(req, res) {
